@@ -13,8 +13,11 @@ require("./config")(app);
 const allRoutes = require("./routes");
 app.use("/", allRoutes);
 
+const usersRouter = require("./routes/users.routes");
+app.use("/users", usersRouter);
+
 const weeksRouter = require("./routes/weeks.routes");
-app.use("/weeks", isAuthenticated, weeksRouter);
+app.use("/weeks", weeksRouter);
 
 const authRouter = require("./routes/auth.routes");
 app.use("/auth", authRouter);

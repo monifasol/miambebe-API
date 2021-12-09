@@ -41,12 +41,9 @@ Parents will receive tips of nutrition randomly.
 | HTTP verb | URL                 | Request body  | Response          | Action                                  |
 | --------- | ------------------- | ------------- | ----------------- | --------------------------------------- |
 | GET       |`/users`             | (empty)       | JSON              | Lists all users                         |                
-| POST      |`/users`             | JSON          | JSON New user     | Adds a new user                         |                
 | GET       |`/users/:id`         | (empty)       | JSON              | Returns the specified user              |  
 | PUT       |`/users/:id`         | JSON          | JSON Updated user | Updates the specified user              |  
 | DELETE    |`/users/:id`         | (empty)       | (empty)           | Deletes the specified user              |  
-| GET       |`/users/:id/babies`  | (empty)       | JSON              | Lists babies of the specified user      |                
-| GET       |`/users/recipes`     | (empty)       | JSON              | Lists all recipes of the specified user |
 
 ##### Babies routes
 
@@ -78,13 +75,14 @@ Parents will receive tips of nutrition randomly.
 
 ##### Recipes routes
 
-| HTTP verb | URL            | Request body  | Response         | Action                          |
-| --------- | -------------- | ------------- | ---------------- | ------------------------------- |
-| GET       |`/recipes`      | (empty)       | JSON             | Lists all recipes               |                
-| POST      |`/recipes`      | JSON          | JSON New recipe  | Adds a new recipe               |                
-| GET       |`/recipes/:id`  | (empty)       | JSON             | Returns the specified           |                
-| PUT       |`/recipes/:id`  | JSON          | JSON             | Updates the specified recipe    |                
-| DELETE    |`/recipes/:id`  | (empty)       | (empty)          | Deletes the specified recipe    |       
+| HTTP verb | URL               | Request body  | Response         | Action                                  |
+| --------- | ----------------- | ------------- | ---------------- | --------------------------------------- |
+| GET       |`/recipes`         | (empty)       | JSON             | Lists all recipes                       |                
+| POST      |`/recipes`         | JSON          | JSON New recipe  | Adds a new recipe                       |                
+| GET       |`/recipes/:id`     | (empty)       | JSON             | Returns the specified                   |                
+| PUT       |`/recipes/:id`     | JSON          | JSON             | Updates the specified recipe            |                
+| DELETE    |`/recipes/:id`     | (empty)       | (empty)          | Deletes the specified recipe            |       
+| GET       |`/recipes/:userId` | (empty)       | JSON             | Lists all recipes of the specified user |
 
 
 ##### Other routes: foodgroups, intolerances, tips, and notifications. 

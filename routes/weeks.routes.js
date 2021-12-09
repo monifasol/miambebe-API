@@ -18,7 +18,7 @@ router.post("/weeks", (req, res, next) => {
 router.get("/weeks/:babyId", (req, res, next) => {
   Week.find()
     .populate("goals")
-    .then((weeks) => res.json(weekss))
+    .then((weeks) => res.json(weeks))
     .catch((err) => res.json(err))
 });
 
@@ -27,7 +27,7 @@ router.get("/weeks/:id", (req, res, next) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(400).json({ message: "Specified id is not valid" });
+    res.status(400).json({ message: "The specified week id is not valid" });
     return;
   }
 
@@ -42,12 +42,12 @@ router.put("/weeks/:id", (req, res, next) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(400).json({ message: "The id specified for the week is not valid" });
+    res.status(400).json({ message: "The specified week id is not valid" });
     return;
   }
 
   Week.findByIdAndUpdate(id, req.body, { new: true })
-    .then((updatedPWeek) => res.json(updatedPWeek))
+    .then((updatedWeek) => res.json(updatedWeek))
     .catch((error) => res.json(error));
 });
 
@@ -56,7 +56,7 @@ router.delete("/weeks/:id", (req, res, next) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(400).json({ message: "The id specified for the week is not valid" });
+    res.status(400).json({ message: "The specified week id is not valid" });
     return;
   }
 
