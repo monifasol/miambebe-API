@@ -31,9 +31,9 @@ Parents will receive tips of nutrition randomly.
 
 | HTTP verb | URL          | Request Headers                 | Request Body              | Action               |
 | --------- | ------------ | ------------------------------- | ------------------------- | -------------------- |
-| POST      | `/signup`    | --                              | { email, password, name } | Signs user up        |
-| POST      | `/login`     | --                              | { email, password }       | Logs user in         |
-| GET       | `/verify`    | Authorization: Bearer \< JWT \> | --                        | Verifies user token  |
+| POST      | `/auth/signup`    | --                              | { email, password, name } | Signs user up        |
+| POST      | `/auth/login`     | --                              | { email, password }       | Logs user in         |
+| GET       | `/auth/verify`    | Authorization: Bearer \< JWT \> | --                        | Verifies user token  |
 | GET       | `/logout`    |                                 | --                        | Logs user out        |
 
 ##### Users routes

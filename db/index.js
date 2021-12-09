@@ -20,6 +20,9 @@ mongoose
 
 const db = mongoose.connection;
 
+
+// Some logs:
+
 // When successfully connected
 db.once("connected", () => console.log("Database connection open"));
 

@@ -6,9 +6,9 @@ const bcrypt = require("bcryptjs");
 
 const users = [
     {
-        firstname: "Monica",
+        name: "Monica",
         email: "moni.sm@gmail.com",
-        password: bcrypt.hashSync("Dahlu25!", bcrypt.genSaltSync(4))
+        password: bcrypt.hashSync("Dahlu1234!", bcrypt.genSaltSync(10))
       },
 ];
 

@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const Week = require("../models/Week.model");
-const Goal = require("../models/Goal.model");
+//const Goal = require("../models/Goal.model");
 
 //  POST /weeks  -  Creates a new week
 router.post("/weeks", (req, res, next) => {
