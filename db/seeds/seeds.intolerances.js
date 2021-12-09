@@ -40,13 +40,13 @@ Intolerance.deleteMany()
   .then(
     Intolerance.insertMany(intolerances)
             .then((intolerances) => {
-                console.log(`Created ${intolerances.length} intolerances)`);
+                console.log(`Created ${intolerances.length} intolerances.`);
                 mongoose.connection.close();
     })
   )
   .catch((err) =>
     console.log(
-      `An error occurred seeding intolerances to the DB: ${err}`
+      `An error occurred seeding intolerances to the DB: ${err}.`
     )
   );
 

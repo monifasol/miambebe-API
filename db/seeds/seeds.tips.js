@@ -36,12 +36,12 @@ Tip.deleteMany()
   .then(
     Tip.insertMany(tips)
             .then((tips) => {
-                console.log(`Created ${tips.length} tips)`);
+                console.log(`Created ${tips.length} tips.`);
                 mongoose.connection.close();
     })
   )
   .catch((err) =>
     console.log(
-      `An error occurred seeding tips to the DB: ${err}`
+      `An error occurred seeding tips to the DB: ${err}.`
     )
   );

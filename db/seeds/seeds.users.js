@@ -22,12 +22,12 @@ User.deleteMany()
   .then(
     User.insertMany(users)
             .then((users) => {
-                console.log(`Created ${users.length} users)`);
+                console.log(`Created ${users.length} users.`);
                 mongoose.connection.close();
     })
   )
   .catch((err) =>
     console.log(
-      `An error occurred seeding tips to the DB: ${err}`
+      `An error occurred seeding tips to the DB: ${err}.`
     )
   );

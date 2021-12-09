@@ -1,13 +1,29 @@
-
 require("dotenv").config();
+const mongoose = require("mongoose");
 
-// connects to DB
-require("./index");
+const MONGO_URI = process.env.MONGODB_URI;
 
-// executes seeds to DB
-require("./seeds/seeds.users")
-require("./seeds/seeds.foodgroups");
-require("./seeds/seeds.intolerances");
-require("./seeds/seeds.tips");
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+};
 
-//require("./seeds/seeds.recipes");
+mongoose
+  .connect(MONGO_URI, options)
+  .then((x) => {
+    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`);
+
+    // executes seeds to DB
+    require("./seeds/seeds.users")
+    require("./seeds/seeds.babies")
+    require("./seeds/seeds.foodgroups");
+    require("./seeds/seeds.intolerances");
+    require("./seeds/seeds.tips");
+    //require("./seeds/seeds.recipes");
+
+  })
+  .catch((err) => {
+    console.error("Error connecting to mongo: ", err);
+  });
+
+

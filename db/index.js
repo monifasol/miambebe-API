@@ -18,23 +18,21 @@ mongoose
     console.error("Error connecting to mongo: ", err);
   });
 
-const db = mongoose.connection;
-
 
 // Some logs:
 
 // When successfully connected
-db.once("connected", () => console.log("Database connection open"));
+mongoose.connection.once("connected", () => console.log("Database connection open"));
 
 // When the connection is disconnected
-db.on("disconnected", () => console.log("Database connection disconnected"));
+mongoose.connection.on("disconnected", () => console.log("Database connection disconnected"));
 
 // If the connection throws an error
-db.on("error", (err) => console.error(`Database connection error: ${err}`));
+mongoose.connection.on("error", (err) => console.error(`Database connection error: ${err}`));
 
 // If the Node process ends, close the Mongoose connection
 process.on("SIGINT", () => {      //  ==> SIGnal INTerrupted
-  db.close(() => {
+  mongoose.connection.close(() => {
     console.log("Database connection disconnected through app termination");
     process.exit(0);
   });

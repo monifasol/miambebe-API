@@ -35,13 +35,13 @@ Recipe.deleteMany()
   .then(
     Recipe.insertMany(recipes)
             .then((recipes) => {
-                console.log(`Created ${recipes.length} recipes)`);
+                console.log(`Created ${recipes.length} recipes.`);
                 mongoose.connection.close();
     })
   )
   .catch((err) =>
     console.log(
-      `An error occurred seeding recipes to the DB: ${err}`
+      `An error occurred seeding recipes to the DB: ${err}.`
     )
   );
           

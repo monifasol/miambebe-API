@@ -76,12 +76,12 @@ Foodgroup.deleteMany()
   .then(
     Foodgroup.insertMany(foodgroups)
             .then((foodgroups) => {
-                console.log(`Created ${foodgroups.length} foodgroups)`);
+                console.log(`Created ${foodgroups.length} foodgroups.`);
                 mongoose.connection.close();
     })
   )
   .catch((err) =>
     console.log(
-      `An error occurred seeding foodgroups to the DB: ${err}`
+      `An error occurred seeding foodgroups to the DB: ${err}.`
     )
   );
