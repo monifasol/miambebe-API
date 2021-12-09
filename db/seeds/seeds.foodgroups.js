@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const mongoose = require("mongoose");
-const Foodgroup = require("../models/Foodgroup.model");
+const Foodgroup = require("../../models/Foodgroup.model");
 
 const foodgroups = [
   {
@@ -67,7 +67,7 @@ const foodgroups = [
 ];
 
 // connects to DB
-require("./index");
+require("../index");
 
 Foodgroup.deleteMany()
   .then((foodgroups) =>

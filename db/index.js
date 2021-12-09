@@ -4,8 +4,13 @@ const mongoose = require("mongoose");
 // Sets the MongoDB URI for the app to have access to it.
 const MONGO_URI = process.env.MONGODB_URI;
 
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+};
+
 mongoose
-  .connect(MONGO_URI)
+  .connect(MONGO_URI, options)
   .then((x) => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`);
   })

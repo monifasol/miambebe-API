@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const mongoose = require("mongoose");
-const Intolerance = require("../models/Intolerance.model");
+const Intolerance = require("../../models/Intolerance.model");
 
 const intolerances = [
   {
@@ -21,13 +21,17 @@ const intolerances = [
     foodgroups: ["EGG"]
   },
   {
+    name: "Nuts allergy",
+    foodgroups: ["FRUIT, VEG"]    
+  },
+  {
     name: "Peanuts allergy",
     foodgroups: ["VEG"]         // peanuts are vegetables!!
   }
 ];
 
 // connects to DB
-require("./index");
+require("../index");
 
 Intolerance.deleteMany()
   .then((intolerances) =>

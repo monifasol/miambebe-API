@@ -8,4 +8,4 @@ const tipSchema = new Schema(
 
 const Tip = model("Tip", tipSchema);
 
-module.exports = Notification;
+module.exports = Tip;
