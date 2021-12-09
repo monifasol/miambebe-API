@@ -41,6 +41,7 @@ Parents will receive tips of nutrition randomly.
 | HTTP verb | URL                 | Request body  | Response          | Action                                  |
 | --------- | ------------------- | ------------- | ----------------- | --------------------------------------- |
 | GET       |`/users`             | (empty)       | JSON              | Lists all users                         |                
+| POST      |`/users`             | JSON          | JSON New user     | Adds a new user                         |                
 | GET       |`/users/:id`         | (empty)       | JSON              | Returns the specified user              |  
 | PUT       |`/users/:id`         | JSON          | JSON Updated user | Updates the specified user              |  
 | DELETE    |`/users/:id`         | (empty)       | (empty)           | Deletes the specified user              |  

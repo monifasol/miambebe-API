@@ -10,6 +10,7 @@ const createResponseObject = require("../utils/index")
 //| HTTP verb | URL                 | Request body  | Response          | Action                                  |
 //| --------- | ------------------- | ------------- | ----------------- | --------------------------------------- |
 //| GET       |`/users`             | (empty)       | JSON              | Lists all users                         |                
+//| POST      |`/users`             | JSON          | JSON New user     | Lists all users                         |                
 //| GET       |`/users/:id`         | (empty)       | JSON              | Returns the specified user              |  
 //| PUT       |`/users/:id`         | JSON          | JSON Updated user | Updates the specified user              |  
 //| DELETE    |`/users/:id`         | (empty)       | (empty)           | Deletes the specified user              |  
@@ -36,6 +37,28 @@ router.get("/", (req, res, next) => {
         }
       ))
 });
+
+// POST /users - Adds a new user
+router.post("/", (req, res, next) => {
+  const { name, email, password } = req.body;
+  
+  User.create({ name, email, password })
+      .then((userCreated) => res
+      .status(200)
+      .json(
+        { data: userCreated, message: `User with id ${userCreated.id} successfully created.`, error: null, pagination: null }
+      )
+    )
+    .catch((err) => res
+      .status(400)
+      .json(
+        { 
+          data: null, 
+          message: `There's been an error: ${error}.`, error: error, pagination: null 
+        }
+      ))
+});
+
 
 //  GET /users/:id -  Returns the user specified by id
 router.get("/:id", (req, res, next) => {
