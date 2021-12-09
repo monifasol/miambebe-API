@@ -27,7 +27,6 @@ Parents will receive tips of nutrition randomly.
 
 ## ✨API Routes✨
 
-
 ##### Auth routes
 
 | HTTP verb | URL          | Request Headers                 | Request Body              | Action               |
@@ -36,7 +35,6 @@ Parents will receive tips of nutrition randomly.
 | POST      | `/login`     | --                              | { email, password }       | Logs user in         |
 | GET       | `/verify`    | Authorization: Bearer \< JWT \> | --                        | Verifies user token  |
 | GET       | `/logout`    |                                 | --                        | Logs user out        |
-
 
 ##### Users routes
                                    
@@ -97,7 +95,6 @@ Parents will receive tips of nutrition randomly.
 | GET       |`/intolerances`         | (empty)       | JSON      | Lists all intolerances                       |                         
 | GET       |`/tips/random`          | (empty)       | JSON      | Gets a random tip                            |                
 | GET       |`/notifications/:weekId`| (empty)       | JSON      | Returns notifications for the specified week |             
-
 
 
 ## Models

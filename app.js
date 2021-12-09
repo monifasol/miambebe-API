@@ -11,13 +11,10 @@ require("./config")(app);
 
 // 👇 Start handling routes here
 const allRoutes = require("./routes");
-app.use("/api", allRoutes);
+app.use("/", allRoutes);
 
-const projectRouter = require("./routes/project.routes");
-app.use("/api", isAuthenticated, projectRouter);
-
-const taskRouter = require("./routes/task.routes");
-app.use("/api", isAuthenticated, taskRouter);
+const weeksRouter = require("./routes/weeks.routes");
+app.use("/weeks", isAuthenticated, weeksRouter);
 
 const authRouter = require("./routes/auth.routes");
 app.use("/auth", authRouter);
