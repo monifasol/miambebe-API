@@ -1,4 +1,3 @@
-require("dotenv").config();
 
 const mongoose = require("mongoose");
 const Intolerance = require("../../models/Intolerance.model");
@@ -17,7 +16,7 @@ const intolerances = [
     foodgroups: ["CEREAL"]
   },
   {
-    name: "Egg",
+    name: "Egg allergy",
     foodgroups: ["EGG"]
   },
   {
@@ -30,7 +29,7 @@ const intolerances = [
   }
 ];
 
-// connects to DB
+// Connection BD
 require("../index");
 
 Intolerance.deleteMany()
@@ -39,15 +38,11 @@ Intolerance.deleteMany()
   )
   .then(
     Intolerance.insertMany(intolerances)
-            .then((intolerances) => {
-                console.log(`Created ${intolerances.length} intolerances.`);
-                mongoose.connection.close();
-    })
+            .then((intolerances) => { console.log(`Created ${intolerances.length} intolerances.`) })
   )
   .catch((err) =>
-    console.log(
-      `An error occurred seeding intolerances to the DB: ${err}.`
-    )
-  );
-
-          
+    console.log(`An error occurred seeding intolerances to the DB: ${err}.`)
+  )
+  .finally( ()=> {
+    mongoose.disconnect();
+  })

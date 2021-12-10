@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 // package that makes the connection with mongodb
 const mongoose = require("mongoose");
 
@@ -17,7 +19,6 @@ mongoose
   .catch((err) => {
     console.error("Error connecting to mongo: ", err);
   });
-
 
 // Some logs:
 

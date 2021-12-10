@@ -12,8 +12,8 @@ const recipeSchema = new Schema(
                     enum: ["easy", "medium", "hard"]
                 },
     public: Boolean,
-    intolerances: [{ type: Schema.Types.ObjectId, ref: "Intolerance" }],
-    tags: [{ type: Schema.Types.ObjectId, ref: "Foodgroup" }],
+    intolerances: [String],
+    tags: [String],
     user: { type: Schema.Types.ObjectId, ref: "User" }
   },
   { timestamps: true }

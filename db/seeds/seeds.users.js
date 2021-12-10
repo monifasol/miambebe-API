@@ -1,7 +1,6 @@
-require("dotenv").config();
 
-const mongoose = require("mongoose");
 const User = require("../../models/User.model");
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const users = [
@@ -12,22 +11,23 @@ const users = [
       },
 ];
 
-// connects to DB
+// Connection BD
 require("../index");
 
 User.deleteMany()
-  .then((tips) =>
+  .then((users) =>
     console.log(`Deleted ${users.deletedCount} users.`)
   )
-  .then(
-    User.insertMany(users)
-            .then((users) => {
-                console.log(`Created ${users.length} users.`);
-                mongoose.connection.close();
-    })
+  .then(()=> {
+    return User
+        .insertMany(users)
+        .then((users) => { console.log(`Created ${users.length} users.`) })
+      }
   )
   .catch((err) =>
-    console.log(
-      `An error occurred seeding tips to the DB: ${err}.`
-    )
-  );
+    console.log(`An error occurred seeding tips to the DB: ${err}.`)
+  )
+  .finally( ()=> {
+    mongoose.disconnect();
+  })
+

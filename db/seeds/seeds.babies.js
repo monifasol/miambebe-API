@@ -1,4 +1,3 @@
-require("dotenv").config();
 
 const mongoose = require("mongoose");
 const Baby = require("../../models/Baby.model");
@@ -13,7 +12,7 @@ const babies = [
     },
 ];
 
-// connects to DB
+// Connection BD
 require("../index");
 
 Baby.deleteMany()
@@ -22,13 +21,11 @@ Baby.deleteMany()
   )
   .then(
     Baby.insertMany(babies)
-            .then((babies) => {
-                console.log(`Created ${babies.length} babies.`);
-                mongoose.connection.close();
-    })
+            .then((babies) => { console.log(`Created ${babies.length} babies.`) })
   )
   .catch((err) =>
-    console.log(
-      `An error occurred seeding tips to the DB: ${err}.`
-    )
-  );
+    console.log(`An error occurred seeding tips to the DB: ${err}.`)
+  )
+  .finally( ()=> {
+    mongoose.disconnect();
+  })

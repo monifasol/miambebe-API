@@ -1,4 +1,3 @@
-require("dotenv").config();
 
 const mongoose = require("mongoose");
 const Foodgroup = require("../../models/Foodgroup.model");
@@ -66,7 +65,7 @@ const foodgroups = [
   }
 ];
 
-// connects to DB
+// Connection BD
 require("../index");
 
 Foodgroup.deleteMany()
@@ -75,13 +74,11 @@ Foodgroup.deleteMany()
   )
   .then(
     Foodgroup.insertMany(foodgroups)
-            .then((foodgroups) => {
-                console.log(`Created ${foodgroups.length} foodgroups.`);
-                mongoose.connection.close();
-    })
+            .then((foodgroups) => { console.log(`Created ${foodgroups.length} foodgroups.`) })
   )
   .catch((err) =>
-    console.log(
-      `An error occurred seeding foodgroups to the DB: ${err}.`
-    )
-  );
+    console.log(`An error occurred seeding foodgroups to the DB: ${err}.` )
+  )
+  .finally( ()=> {
+    mongoose.disconnect();
+  })
