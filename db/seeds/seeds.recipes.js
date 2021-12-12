@@ -35,7 +35,7 @@ const recipes =
 require("../index");
 
 Recipe.deleteMany()
-  .then((recipes) => { return console.log(`Deleted ${recipes.deletedCount} recipes.`) })
+  .then((recipes) => console.log(`Deleted ${recipes.deletedCount} recipes.`))
   .then( () => {
     User.findOne({ email: adminEmail })
         .then( (user) => {
@@ -64,8 +64,8 @@ Recipe.deleteMany()
   .catch((err) =>
     console.log(`An error occurred seeding recipes to the DB: ${err}.`)
   )
-  .finally( () => {
-    mongoose.disconnect();
-  })
+  //.finally( () => {
+  //  mongoose.disconnect();
+  //})
   
           

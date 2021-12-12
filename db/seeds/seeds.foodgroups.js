@@ -75,6 +75,7 @@ Foodgroup.deleteMany()
   .then(
     Foodgroup.insertMany(foodgroups)
             .then((foodgroups) => { console.log(`Created ${foodgroups.length} foodgroups.`) })
+            .catch((e)=> console.log(e))
   )
   .catch((err) =>
     console.log(`An error occurred seeding foodgroups to the DB: ${err}.` )

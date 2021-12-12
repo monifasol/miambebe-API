@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const User = require("../models/User.model");
 const Baby = require("../models/Baby.model")
 
-const createResponseObject = require("../utils/index")
-
+const createResponseObject = require("../utils/createResponseObject")
+const createResponseErrorObject = require("../utils/createResponseErrorObject")
 
 //| HTTP verb | URL                 | Request body  | Response          | Action                                  |
 //| --------- | ------------------- | ------------- | ----------------- | --------------------------------------- |
@@ -16,11 +16,10 @@ const createResponseObject = require("../utils/index")
 //| DELETE    |`/users/:id`         | (empty)       | (empty)           | Deletes the specified user              |  
 
 
-//  GET /users -  Returns all weeks for the specified baby
+//  GET /users -  Returns all users
 router.get("/", (req, res, next) => {
 
   User.find()
-    //.populate({ path: 'babies', name: { $ne: '' } })
     .populate('babies')
     .then((users) => res
         .status(200)
@@ -28,7 +27,7 @@ router.get("/", (req, res, next) => {
            { data: users, message: `${users.length} user(s) found.`, error: null, pagination: null }
         )
     )
-    .catch((err) => res
+    .catch((error) => res
       .status(400)
       .json(
         { 
@@ -49,7 +48,7 @@ router.post("/", (req, res, next) => {
         { data: userCreated, message: `User with id ${userCreated.id} successfully created.`, error: null, pagination: null }
       )
     )
-    .catch((err) => res
+    .catch((error) => res
       .status(400)
       .json(
         { 
@@ -72,7 +71,7 @@ router.get("/:id", (req, res, next) => {
   User.findById(id)
     .populate('babies')
     .then((user) => res.status(200).json(user))
-    .catch((err) => res
+    .catch((error) => res
       .status(400)
       .json(
         { 
@@ -134,7 +133,7 @@ router.delete("/:id", (req, res, next) => {
           { data: null, message: `User with id ${updatedUser._id} deleted.`, error: null, pagination: null }
         )
     )
-    .catch((err) => res
+    .catch((error) => res
       .status(400)
       .json(
         { 

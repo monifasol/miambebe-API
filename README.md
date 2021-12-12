@@ -57,22 +57,24 @@ Parents will receive tips of nutrition randomly.
 
 ##### Weeks routes
 
-| HTTP verb | URL                | Request body  | Response          | Action                                   |
-| --------- | ------------------ | ------------- | ----------------- | ---------------------------------------- |
-| GET       |`/weeks/:babyId`    | (empty)       | JSON              | Lists all weeks for the specified baby   |   
-| POST      |`/weeks/:babyId`    | JSON          | JSON New week     | Adds a new week for the specified baby   |   
-| GET       |`/weeks/:id`        | (empty)       | JSON              | Returns the specified week               |                
-| PUT       |`/weeks/:id/goals`  | JSON          | JSON Updated week | Updates Week (add GOALS to the week)     |                
-| DELETE    |`/weeks/:id/goals`  | (empty)       | JSON              | Deletes goals from specified week        | 
+| HTTP verb | URL                       | Request body  | Response          | Action                                   |
+| --------- | ------------------------- | ------------- | ----------------- | ---------------------------------------- |
+| GET       |`/weeks/:babyId`           | (empty)       | JSON              | Lists all weeks for the specified baby   |   
+| POST      |`/weeks`                   | JSON          | JSON New week     | Adds a new week for the specified baby   |   
+| GET       |`/weeks/:babyId/:firstday` | (empty)       | JSON              | Returns week with the specified firstday |   
+| GET       |`/weeks/:id`               | (empty)       | JSON              | Returns the specified week               |                
+| PUT       |`/weeks/:id`               | JSON          | JSON Updated week | Updates Week (add GOALS to the week)     |                
+| DELETE    |`/weeks/:id`               | (empty)       | JSON              | Deletes goals from specified week        | 
 
 ##### Goals routes
 
-| HTTP verb | URL              | Request body  | Response          | Action                               |
-| --------- | ---------------- | ------------- | ----------------- | ------------------------------------ |
-| GET       |`/goals/:weekId`  | (empty)       | JSON              | Lists goals for the specified week   |                
-| GET       |`/goals/:id`      | (empty)       | JSON              | Returns the specified goal           |  
-| PUT       |`/goals/:id`      | JSON          | JSON Updated goal | Updates the specified goal           |  
-| DELETE    |`/goals/:id`      | (empty)       | (empty)           | Deletes the specified goal           |  
+| HTTP verb | URL              | Request body  | Response          | Action                                        |
+| --------- | ---------------- | ------------- | ----------------- | --------------------------------------------- |
+| POST      |`/goals`          | JSON          | JSON              | Adds a new goal (and pushes a goal to Week)   |                
+| GET       |`/goals/:id`      | (empty)       | JSON              | Returns the specified goal                    |  
+| PUT       |`/goals/:id`      | JSON          | JSON Updated goal | Updates the specified goal                    |  
+| DELETE    |`/goals/:id`      | (empty)       | (empty)           | Deletes the specified goal                    |  
+| GET       |`/goals/:weekId`  | (empty)       | JSON              | Lists goals for the specified week            |                
 
 ##### Recipes routes
 
@@ -91,7 +93,7 @@ Parents will receive tips of nutrition randomly.
 | HTTP verb | URL                    | Request body  | Response  | Action                                       |
 | --------- | ---------------------- | ------------- | ----------| -------------------------------------------- |
 | GET       |`/foodgroups`           | (empty)       | JSON      | Lists all foodgroups                         |                
-| GET       |`/intolerances`         | (empty)       | JSON      | Lists all intolerances                       |                         
+| GET       |`/intolerances`         | (empty)       | JSON      | Lists all intolerances                       | 
 | GET       |`/tips/random`          | (empty)       | JSON      | Gets a random tip                            |                
 | GET       |`/notifications/:weekId`| (empty)       | JSON      | Returns notifications for the specified week |             
 
@@ -119,7 +121,9 @@ Parents will receive tips of nutrition randomly.
 
 ##### Week model
 ```js
-    startdate: { type: Date, required: true},
+    firstday: { type: String, required: true},
+    lastday: { type: String, required: true},
+    baby: { type: Schema.Types.ObjectId, ref: "Baby" },
     goals: [{ type: Schema.Types.ObjectId, ref: "Goal" }]
 ```
 

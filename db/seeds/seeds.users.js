@@ -4,11 +4,16 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const users = [
-    {
+      {
         name: "Monica",
         email: "moni.sm@gmail.com",
         password: bcrypt.hashSync("Dahlu1234!", bcrypt.genSaltSync(10))
       },
+      {
+        name: "Florian",
+        email: "jublot.florian@gmail.com",
+        password: bcrypt.hashSync("Dahlu1234!", bcrypt.genSaltSync(10))
+      }
 ];
 
 // Connection BD
@@ -25,7 +30,7 @@ User.deleteMany()
       }
   )
   .catch((err) =>
-    console.log(`An error occurred seeding tips to the DB: ${err}.`)
+    console.log(`An error occurred seeding users to the DB: ${err}.`)
   )
   .finally( ()=> {
     mongoose.disconnect();

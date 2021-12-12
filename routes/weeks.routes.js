@@ -3,56 +3,107 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const Week = require("../models/Week.model");
-//const Goal = require("../models/Goal.model");
+const Goal = require("../models/Goal.model");
+const Baby = require("../models/Baby.model");
 
-//  POST /weeks  -  Creates a new week
-router.post("/weeks", (req, res, next) => {
-  const { startdate } = req.body;
+const createResponseObject = require("../utils/createResponseObject")
+const createResponseErrorObject = require("../utils/createResponseErrorObject")
 
-  Week.create({ startdate, goals: [] })
-    .then((response) => res.json(response))
-    .catch((err) => res.json(err));
-});
 
-//  GET /weeks -  Returns all weeks for the specified baby
-router.get("/weeks/:babyId", (req, res, next) => {
-  Week.find()
-    .populate("goals")
-    .then((weeks) => res.json(weeks))
-    .catch((err) => res.json(err))
-});
+// | HTTP verb | URL                       | Request body  | Response          | Action                                   |
+// | --------- | ------------------------- | ------------- | ----------------- | ---------------------------------------- |
+// | GET       |`/weeks/:babyId`           | (empty)       | JSON              | Lists all weeks for the specified baby   |   
+// | POST      |`/weeks`                   | JSON          | JSON New week     | Adds a new week for the specified baby   |   
+// | GET       |`/weeks/:babyId/:firstday` | (empty)       | JSON              | Returns week with the specified firstday |   
+// | GET       |`/weeks/:id`               | (empty)       | JSON              | Returns the specified week               |                
+// | PUT       |`/weeks/:id`               | JSON          | JSON Updated week | Updates Week (add GOALS to the week)     |                
+// | DELETE    |`/weeks/:id`               | (empty)       | JSON              | Deletes goals from specified week        | 
+
 
 //  GET /weeks/:id -  Returns the week specified by id
-router.get("/weeks/:id", (req, res, next) => {
+router.get("/:id", (req, res) => {
+
+  console.log("*********************************")
+  console.log("I AM IN THE ROUTE")
   const { id } = req.params;
+  console.log("Week Id in the route is: ", id)
+  console.log("*********************************")
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.status(400).json({ message: "The specified week id is not valid" });
     return;
   }
 
-  Week.findById(id)
+  Week.findById({_id: id})
     .populate("goals")
-    .then((week) => res.status(200).json(week))
-    .catch((error) => res.json(error));
+    //.populate("baby")
+    .then((foundWeek) => {
+      let message = `Week with id ${foundWeek._id} found.`
+      res.status(200).json(createResponseObject(foundWeek, message, null))    
+    })
+    .catch((error) => res.status(400).json(createResponseErrorObject(error)))
 });
 
-// PUT  /weeks/:id  -  Updates the specified week (add goals)
-router.put("/weeks/:id", (req, res, next) => {
-  const { id } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(400).json({ message: "The specified week id is not valid" });
-    return;
+
+//  GET /weeks/:babyId -  Returns all weeks for the specified baby
+router.get("/:babyId", (req, res) => {
+  const {babyId} = req.params
+
+  Week.find( { baby: babyId } )
+    .populate("goals")
+    //.populate("baby")
+    .then((weeks) => {
+      let message = `List of ${weeks.length} found.`
+      res.status(200).json(createResponseObject(weeks, message, null)) 
+    })
+    .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+});
+
+//  POST /weeks -  Creates a new week
+router.post("/", async (req, res) => {
+  const { firstday, lastday, babyId } = req.body
+
+  const weekFound = await Week.findOne( {firstday, baby: babyId } )
+
+  if (!weekFound) {
+    Week.create({ firstday, lastday, baby: babyId, goals: [] })
+    .then((createdWeek) => {
+      let message = `Week with with id ${createdWeek._id} created.`
+      res.status(200).json(createResponseObject(createdWeek, message, null)) 
+    })
+    .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+  } else {
+    // we still return the week found
+    let message = `Week was not created because it already existed, with id ${weekFound._id}.`
+    res.status(200).json(createResponseObject(weekFound, message, null)) 
   }
-
-  Week.findByIdAndUpdate(id, req.body, { new: true })
-    .then((updatedWeek) => res.json(updatedWeek))
-    .catch((error) => res.json(error));
 });
+
+
+
+// THIS ROUTE NEEDS TO BE TESTED:
+
+//  GET /weeks/:babyId/:firstday -  Returns week with the specified firstday
+router.get("/:babyId/:firstday", (req, res) => {
+  
+  // firstday format is: dd-mm-yyyy
+  const {babyId, firstday } = req.params
+
+  Week.findOne( { baby: babyId, firstday: firstday } )
+    .populate("goals")
+    //.populate("baby")
+    .then((foundWeek) => {
+      console.log("foundWeek : ", foundWeek)
+      let message = `Week with id ${foundWeek._id} found.`
+      res.status(200).json(createResponseObject(foundWeek, message, null))    
+    })
+    .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+});
+
 
 // DELETE  /weeks/:id  -  Deletes the specified week
-router.delete("/weeks/:id", (req, res, next) => {
+router.delete("/:id", (req, res, next) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -60,13 +111,12 @@ router.delete("/weeks/:id", (req, res, next) => {
     return;
   }
 
-  Week.findByIdAndRemove(id)
-    .then(() =>
-      res.json({
-        message: `Week with id ${id} is removed successfully.`,
-      })
-    )
-    .catch((error) => res.json(error));
+  Week.findByIdAndRemove({_id: id})
+  .then(() => {
+    let message = `Week with id ${id} removed successfully.`
+    res.status(200).json(createResponseObject(null, message, null))    
+  })
+  .catch((error) => res.status(400).json(createResponseErrorObject(error)))
 });
 
 module.exports = router;
