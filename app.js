@@ -22,6 +22,12 @@ app.use("/weeks", isAuthenticated, weeksRouter);
 const goalsRouter = require("./routes/goals.routes");
 app.use("/goals", isAuthenticated, goalsRouter);
 
+const babiesRouter = require("./routes/babies.routes");
+app.use("/babies", isAuthenticated, babiesRouter);
+
+const recipesRouter = require("./routes/recipes.routes");
+app.use("/recipes", isAuthenticated, recipesRouter);
+
 const foodgroupsRouter = require("./routes/foodgroups.routes");
 app.use("/foodgroups", isAuthenticated, foodgroupsRouter);
 
