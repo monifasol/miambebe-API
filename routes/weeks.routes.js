@@ -23,12 +23,8 @@ const createResponseErrorObject = require("../utils/createResponseErrorObject")
 //  GET /weeks/:id -  Returns the week specified by id
 router.get("/:id", (req, res) => {
 
-  console.log("*********************************")
-  console.log("I AM IN THE ROUTE")
   const { id } = req.params;
-  console.log("Week Id in the route is: ", id)
-  console.log("*********************************")
-
+  
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.status(400).json({ message: "The specified week id is not valid" });
     return;

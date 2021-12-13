@@ -44,6 +44,7 @@ Parents will receive tips of nutrition randomly.
 | POST      |`/users`             | JSON          | JSON New user     | Adds a new user                         |                
 | GET       |`/users/:id`         | (empty)       | JSON              | Returns the specified user              |  
 | PUT       |`/users/:id`         | JSON          | JSON Updated user | Updates the specified user              |  
+| PUT       |`/users/:id/baby`    | (JSON)        | JSON Updated user | Updates the specified user (adds baby)  |
 | DELETE    |`/users/:id`         | (empty)       | (empty)           | Deletes the specified user              |  
 
 ##### Babies routes
