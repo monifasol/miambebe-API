@@ -14,6 +14,36 @@ const createResponseErrorObject = require("../utils/createResponseErrorObject")
 //| PUT       |`/babies/:id`    | JSON          | JSON Updated baby  | Updates info for the speficied baby         | 
 
 
+// PUT  /babies/:id  -  Updates the specified baby
+router.put("/:id", (req, res) => {
+
+    console.log("HOLAAAAAAA!!!!!")
+
+    const { id } = req.params
+    const bodyRequest = req.body
+  
+    console.log("BODY IN THE REQUEST FOR UPDATE BABY ===> ", bodyRequest)
+  
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json({ message: "The specified user id is not valid" });
+      return;
+    }
+  
+    Baby
+      .findByIdAndUpdate(
+          { _id : id },
+          { bodyRequest },
+          { new: true }
+        )
+      .then((updatedBaby) => {
+        let message = `Baby with id ${updatedBaby._id} successfully updated.`
+        res.status(200).json(createResponseObject(updatedBaby, message, null))    
+      })
+      .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+  });
+
+
+
 //  GET /babies -  Returns all babies
 router.get("/", (req, res) => {
 
@@ -51,34 +81,6 @@ router.get("/:id", (req, res) => {
     .then((foundBaby) => {
       let message = `User with id ${foundBaby.id} found.`
       res.status(200).json(createResponseObject(foundBaby, message, null))    
-    })
-    .catch((error) => res.status(400).json(createResponseErrorObject(error)))
-});
-
-
-
-// PUT  /babies/:id  -  Updates the specified baby
-router.put("/:id", (req, res) => {
-
-  const { id } = req.params
-  const bodyRequest = req.body
-
-  console.log("BODY IN THE REQUEST FOR UPDATE BABY ===> ", bodyRequest)
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(400).json({ message: "The specified user id is not valid" });
-    return;
-  }
-
-  Baby
-    .findByIdAndUpdate(
-        { _id : id },
-        { bodyRequest },
-        { new: true }
-      )
-    .then((updatedBaby) => {
-      let message = `Baby with id ${updatedBaby._id} successfully updated.`
-      res.status(200).json(createResponseObject(updatedBaby, message, null))    
     })
     .catch((error) => res.status(400).json(createResponseErrorObject(error)))
 });
