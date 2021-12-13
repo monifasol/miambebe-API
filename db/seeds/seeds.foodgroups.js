@@ -16,13 +16,13 @@ const foodgroups = [
     picture: ""
   },
   {
-    name: "Dried vegetables",
+    name: "Legumes",
     code: "DRIED_VEG",
     description: "Lentils, chickpeas, white beans,",
     picture: ""
   },
   {
-    name: "Dairy products",
+    name: "Dairy",
     code: "DAIRY",
     description: "Cow milk, goat milk, yogurts, cheese,...",
     picture: ""
@@ -34,7 +34,7 @@ const foodgroups = [
     picture: ""
   },
   {
-    name: "Breads, cereal products",
+    name: "Cereal, Bread",
     code: "CEREAL",
     description: "Breads, cereals, rice, pasta, noodles and other grains.",
     picture: ""
@@ -46,7 +46,7 @@ const foodgroups = [
     picture: ""
   },
   {
-    name: "White and red meat",
+    name: "Meat",
     code: "MEAT",
     description: "Meat",
     picture: ""
@@ -58,7 +58,7 @@ const foodgroups = [
     picture: ""
   },
   {
-    name: "Added fat",
+    name: "Fats",
     code: "FAT",
     description: "Butter, olive oil, any vegetal oil,...",
     picture: ""
