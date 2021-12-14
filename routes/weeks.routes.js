@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const Week = require("../models/Week.model");
 const Goal = require("../models/Goal.model");
 const Baby = require("../models/Baby.model");
+const Foodgroup = require("../models/Foodgroup.model");
 
 const createResponseObject = require("../utils/createResponseObject")
 const createResponseErrorObject = require("../utils/createResponseErrorObject")
@@ -31,8 +32,17 @@ router.get("/:id", (req, res) => {
   }
 
   Week.findById({_id: id})
-    .populate("goals")
-    //.populate("baby")
+    //.populate('baby')
+    .populate({
+      path: "goals",
+      populate: [ 
+        {
+          path: "foodgroup",
+          model: "Foodgroup"
+        }
+      ]
+    })
+    .lean()
     .then((foundWeek) => {
       let message = `Week with id ${foundWeek._id} found.`
       res.status(200).json(createResponseObject(foundWeek, message, null))    
@@ -47,8 +57,17 @@ router.get("/:babyId", (req, res) => {
   const {babyId} = req.params
 
   Week.find( { baby: babyId } )
-    .populate("goals")
     //.populate("baby")
+    .populate({
+      path: "goals",
+      populate: [ 
+        {
+          path: "foodgroup",
+          model: "Foodgroup"
+        }
+      ]
+    })
+    .lean()
     .then((weeks) => {
       let message = `List of ${weeks.length} found.`
       res.status(200).json(createResponseObject(weeks, message, null)) 
@@ -87,8 +106,17 @@ router.get("/:babyId/:firstday", (req, res) => {
   const {babyId, firstday } = req.params
 
   Week.findOne( { baby: babyId, firstday: firstday } )
-    .populate("goals")
     //.populate("baby")
+    .populate({
+      path: "goals",
+      populate: [ 
+        {
+          path: "foodgroup",
+          model: "Foodgroup"
+        }
+      ]
+    })
+    .lean()
     .then((foundWeek) => {
       console.log("foundWeek : ", foundWeek)
       let message = `Week with id ${foundWeek._id} found.`

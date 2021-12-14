@@ -4,7 +4,6 @@ const recipeSchema = new Schema(
   {
     title: { type: String, required: true},
     content: { type: String, required: true},
-    content: { type: String },
     preparationTime: { type: Number, required: true},   // in minutes 
     difficulty: { 
                     type: String, 
