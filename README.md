@@ -52,7 +52,7 @@ Parents will receive tips of nutrition randomly.
 | HTTP verb | URL             | Request body  | Response           | Action                                      |
 | --------- | --------------- | ------------- | ------------------ | ------------------------------------------- |
 | GET       |`/babies`        | (empty)       | JSON               | Lists all babies                            |                   
-| POST      |`/babies`        | JSON          | JSON New Baby      | Adds a new baby                             |                   
+| POST      |`/babies/:userId`| JSON          | JSON New Baby      | Adds a new baby for specified user          |                   
 | GET       |`/babies/:id`    | (empty)       | JSON               | Returns the specified baby                  |               
 | PUT       |`/babies/:id`    | JSON          | JSON Updated baby  | Updates info for the speficied baby         | 
 
@@ -143,7 +143,6 @@ Parents will receive tips of nutrition randomly.
     content: { type: String },
     preparationTime: { type: Number, required: true},   // in minutes 
     difficulty: { type: String, required: true, enum: ["easy", "medium", "hard"]},
-    public: Boolean,
     intolerances: [{ type: Schema.Types.ObjectId, ref: "Intolerance" }],
     tags: [{ type: Schema.Types.ObjectId, ref: "Foodgroup" }],
     user: { type: Schema.Types.ObjectId, ref: "User" }
