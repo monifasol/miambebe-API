@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Baby = require("../models/Baby.model")
+const User = require("../models/User.model")
 
 const createResponseObject = require("../utils/createResponseObject")
 const createResponseErrorObject = require("../utils/createResponseErrorObject")
@@ -9,7 +10,7 @@ const createResponseErrorObject = require("../utils/createResponseErrorObject")
 //| HTTP verb | URL             | Request body  | Response           | Action                                      |
 //| --------- | --------------- | ------------- | ------------------ | ------------------------------------------- |
 //| GET       |`/babies`        | (empty)       | JSON               | Lists all babies                            |                   
-//| POST      |`/babies`        | JSON          | JSON New Baby      | Adds a new baby                             |                   
+//| POST      |`/babies/:userId`| JSON          | JSON New Baby      | Adds a new baby for specified user          |                   
 //| GET       |`/babies/:id`    | (empty)       | JSON               | Returns the specified baby                  |               
 //| PUT       |`/babies/:id`    | JSON          | JSON Updated baby  | Updates info for the speficied baby         | 
 
@@ -17,7 +18,7 @@ const createResponseErrorObject = require("../utils/createResponseErrorObject")
 // PUT  /babies/:id  -  Updates the specified baby
 router.put("/:id", (req, res) => {
 
-    console.log("HOLAAAAAAA!!!!!")
+    console.log("HOLAAAAAAA!!!!! UPDATE BABY: ")
 
     const { id } = req.params
     const bodyRequest = req.body
@@ -32,14 +33,17 @@ router.put("/:id", (req, res) => {
     Baby
       .findByIdAndUpdate(
           { _id : id },
-          { bodyRequest },
+          bodyRequest,
           { new: true }
         )
       .then((updatedBaby) => {
+          console.log("SENYORES, HE UPDATED BABY!!!!! ", updatedBaby)
         let message = `Baby with id ${updatedBaby._id} successfully updated.`
         res.status(200).json(createResponseObject(updatedBaby, message, null))    
       })
-      .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+      .catch((error) => {
+        console.log("SENYORES, NOOOOOOOO HE UPDATED BABY!!!!! ")
+        res.status(400).json(createResponseErrorObject(error)) })
   });
 
 
@@ -55,14 +59,33 @@ router.get("/", (req, res) => {
     .catch((error) => res.status(400).json(createResponseErrorObject(error)))
 });
 
-// POST /babies - Adds a new baby
-router.post("/", (req, res) => {
+// POST /babies/:userId - Adds a new baby
+router.post("/:userId", (req, res) => {
   const { name, age, weight, pictureUrl } = req.body;
+  const { userId } = req.params
+
+  console.log("IM GOING TO CREATE A BABY")
   
   Baby.create({ name, age, weight, pictureUrl })
       .then((createdBaby) => {
         let message = `Baby with id ${createdBaby.id} successfully created.`
-        res.status(200).json(createResponseObject(createdBaby, message, null))    
+
+        console.log("BABY CREATED ==> ", createdBaby.id)
+
+        User
+        .findByIdAndUpdate(
+            { _id : userId },
+            { $addToSet: { babies: createdBaby.id } },  
+            { new: true }
+          )
+          .populate("babies")
+          .then((updatedUser) => {
+
+            console.log("USER UPDATED WITH BABY ==> ", updatedUser.id)
+            let message = `Baby "${createdBaby.name}" created in profile of user with id ${updatedUser._id}.`
+            res.status(200).json(createResponseObject(updatedUser, message, null))    
+          })
+          .catch((error) => res.status(400).json(createResponseErrorObject(error)))
       })
       .catch((error) => res.status(400).json(createResponseErrorObject(error)))
 });

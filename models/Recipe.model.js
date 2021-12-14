@@ -11,7 +11,6 @@ const recipeSchema = new Schema(
                     required: true,
                     enum: ["easy", "medium", "hard"]
                 },
-    public: Boolean,
     intolerances: [String],
     tags: [String],
     user: { type: Schema.Types.ObjectId, ref: "User" }

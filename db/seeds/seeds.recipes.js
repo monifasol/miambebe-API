@@ -13,7 +13,6 @@ const recipes =
       picture: "",
       preparationTime: 50, 
       difficulty: "easy",
-      public: true,
       intolerances: ["Egg allergy"],
       tags:["EGG", "VEG"],
       user: null
@@ -24,7 +23,6 @@ const recipes =
       picture: "",
       preparationTime: 30, 
       difficulty: "medium",
-      public: true,
       intolerances: ["Fructose intolerance", "Celiac desease"],
       tags:["FRUIT", "CEREAL"],
       user: null
@@ -48,7 +46,6 @@ Recipe.deleteMany()
                 picture: recipe.picture,
                 preparationTime: recipe.preparationTime, 
                 difficulty: recipe.difficulty,
-                public: recipe.public,
                 intolerances: recipe.intolerances,
                 tags: recipe.tags,
                 user: user._id
