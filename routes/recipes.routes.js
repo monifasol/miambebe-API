@@ -21,6 +21,7 @@ const createResponseErrorObject = require("../utils/createResponseErrorObject")
 router.get("/", (req, res) => {
 
   Recipe.find()
+    .populate('user')
     .then((recipes) => {
       let message = `${recipes.length} recipes(s) found.`
       res.status(200).json(createResponseObject(recipes, message, null))    

@@ -83,11 +83,11 @@ router.post("/", async (req, res) => {
 
   if (!weekFound) {
     Week.create({ firstday, lastday, baby: babyId, goals: [] })
-    .then((createdWeek) => {
-      let message = `Week with with id ${createdWeek._id} created.`
-      res.status(200).json(createResponseObject(createdWeek, message, null)) 
-    })
-    .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+        .then((createdWeek) => {
+          let message = `Week with with id ${createdWeek._id} created.`
+          res.status(200).json(createResponseObject(createdWeek, message, null)) 
+        })
+        .catch((error) => res.status(400).json(createResponseErrorObject(error)))
   } else {
     // we still return the week found
     let message = `Week was not created because it already existed, with id ${weekFound._id}.`

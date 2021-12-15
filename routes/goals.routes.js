@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 
 const Goal = require("../models/Goal.model");
 const Week = require("../models/Week.model");
+const Foodgroup = require("../models/Foodgroup.model")
 
 const createResponseObject = require("../utils/createResponseObject")
 const createResponseErrorObject = require("../utils/createResponseErrorObject")
@@ -31,7 +32,6 @@ router.post("/", (req, res) => {
                 $push: { goals: newGoal._id },
             });
         })
-        //.populate('foodgroup')
         .then((newGoal) => {
             let message = `Goal with id ${newGoal._id} has been created.`
             res.status(200).json(createResponseObject(newGoal, message, null))    
@@ -44,7 +44,10 @@ router.get("/:id", (req, res) => {
     const { id } = req.params;
   
     Goal.findById({ _id: id })
-        .populate('foodgroup')
+        .populate({
+            path: "foodgroup",
+            model: "Foodgroup"
+        })
         .then((foundGoal) => {
             let message = `Goal with id ${foundGoal._id} found.`
             res.status(200).json(createResponseObject(foundGoal, message, null))    
@@ -63,6 +66,10 @@ router.put("/:id", (req, res) => {
             { foodgroup: foodgroupId, quantityGoal, quantityAccomplished, week: weekId }, 
             { new: true }
         )
+        .populate({
+            path: "foodgroup",
+            model: "Foodgroup"
+        })
         .then((updatedGoal) => {
             let message = `Goal with id ${updatedGoal._id} has been updated.`
             res.status(200).json(createResponseObject(updatedGoal, message, null))    
