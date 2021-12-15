@@ -97,7 +97,7 @@ router.post('/login', (req, res, next) => {
         const { _id, email, name } = foundUser;
         
         // Create an object that will be set as the token content
-        const content = { _id, email, name, baby: "babies" };
+        const content = { _id, email, name };
 
         // Create and sign the token
         const authToken = jwt.sign( 
