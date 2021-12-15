@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const Baby = require("../models/Baby.model")
 const User = require("../models/User.model")
 
+const fileUploader = require("../config/cloudinary.config");
+
 const createResponseObject = require("../utils/createResponseObject")
 const createResponseErrorObject = require("../utils/createResponseErrorObject")
 
@@ -13,18 +15,14 @@ const createResponseErrorObject = require("../utils/createResponseErrorObject")
 //| POST      |`/babies/:userId`| JSON          | JSON New Baby      | Adds a new baby for specified user          |                   
 //| GET       |`/babies/:id`    | (empty)       | JSON               | Returns the specified baby                  |               
 //| PUT       |`/babies/:id`    | JSON          | JSON Updated baby  | Updates info for the speficied baby         | 
-
+//| POST      |`/babies/:babyId/uploadPic`| JSON (file)    | pic_url  | Adds avatar picture to baby                |
 
 // PUT  /babies/:id  -  Updates the specified baby
 router.put("/:id", (req, res) => {
 
-    console.log("HOLAAAAAAA!!!!! UPDATE BABY: ")
-
     const { id } = req.params
     const bodyRequest = req.body
-  
-    console.log("BODY IN THE REQUEST FOR UPDATE BABY ===> ", bodyRequest)
-  
+    
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: "The specified user id is not valid" });
       return;
@@ -37,15 +35,39 @@ router.put("/:id", (req, res) => {
           { new: true }
         )
       .then((updatedBaby) => {
-          console.log("SENYORES, HE UPDATED BABY!!!!! ", updatedBaby)
         let message = `Baby with id ${updatedBaby._id} successfully updated.`
         res.status(200).json(createResponseObject(updatedBaby, message, null))    
       })
       .catch((error) => {
-        console.log("SENYORES, NOOOOOOOO HE UPDATED BABY!!!!! ")
         res.status(400).json(createResponseErrorObject(error)) })
   });
 
+
+// POST "/babies/:babyId/uploadPic" => Receives an image, sends it to Cloudinary via fileUploader and returns the image URL
+router.post("/:babyId/uploadPic", fileUploader.single("imageUrl"), (req, res, next) => {
+
+  const { babyId } = req.params
+
+  if (!req.file.path) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+
+  let image_baby_url = req.file.path
+
+  Baby
+    .findByIdAndUpdate(
+        { _id : babyId },
+        { imageUrl: image_baby_url },
+        { new: true }
+      )
+    .then((updatedBaby) => {
+      let message = `Picture uploaded for baby with id ${updatedBaby._id}.`
+      res.status(200).json(createResponseObject(image_baby_url, message, null))    
+    })
+    .catch((error) => {
+      res.status(400).json(createResponseErrorObject(error)) })
+});
 
 
 //  GET /babies -  Returns all babies

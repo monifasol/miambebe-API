@@ -6,7 +6,8 @@ const babySchema = new Schema(
     age: { type: Number, required: true},        // in months
     weight: { type: Number, required: true},     // in Kg
     intolerances: [String],
-    avoids: [String]
+    avoids: [String],
+    imageUrl: { type: String }
   },
   { timestamps: true }
 );

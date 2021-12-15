@@ -55,6 +55,7 @@ Parents will receive tips of nutrition randomly.
 | POST      |`/babies/:userId`| JSON          | JSON New Baby      | Adds a new baby for specified user          |                   
 | GET       |`/babies/:id`    | (empty)       | JSON               | Returns the specified baby                  |               
 | PUT       |`/babies/:id`    | JSON          | JSON Updated baby  | Updates info for the speficied baby         | 
+| POST      |`/babies/:babyId/uploadPic`| JSON (file)    | pic_url  | Adds avatar picture to baby                |
 
 ##### Weeks routes
 
@@ -116,8 +117,9 @@ Parents will receive tips of nutrition randomly.
     name: { type: String, required: true}, 
     age: { type: Number, required: true},        // in months
     weight: { type: Number, required: true},     // in Kg
-    intolerances: [{ type: Schema.Types.ObjectId, ref: "Intolerance" }],
-    avoids: [{ type: Schema.Types.ObjectId, ref: "Foodgroup" }]
+    intolerances: [String],
+    avoids: [String],
+    name: { type: String}
 ```
 
 ##### Week model
