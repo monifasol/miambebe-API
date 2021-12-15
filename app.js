@@ -17,7 +17,7 @@ const usersRouter = require("./routes/users.routes");
 app.use("/users", isAuthenticated, usersRouter);
 
 const weeksRouter = require("./routes/weeks.routes");
-app.use("/weeks", isAuthenticated, weeksRouter);
+app.use("/weeks", weeksRouter);
 
 const goalsRouter = require("./routes/goals.routes");
 app.use("/goals", isAuthenticated, goalsRouter);
