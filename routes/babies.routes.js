@@ -63,7 +63,7 @@ router.post("/:babyId/uploadPic", fileUploader.single("imageUrl"), (req, res, ne
       )
     .then((updatedBaby) => {
       let message = `Picture uploaded for baby with id ${updatedBaby._id}.`
-      res.status(200).json(createResponseObject(image_baby_url, message, null))    
+      res.status(200).json(createResponseObject(updatedBaby, message, null))    
     })
     .catch((error) => {
       res.status(400).json(createResponseErrorObject(error)) })
