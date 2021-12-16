@@ -44,10 +44,7 @@ router.get("/:id", (req, res) => {
     const { id } = req.params;
   
     Goal.findById({ _id: id })
-        .populate({
-            path: "foodgroup",
-            model: "Foodgroup"
-        })
+        .populate('foodgoup')
         .then((foundGoal) => {
             let message = `Goal with id ${foundGoal._id} found.`
             res.status(200).json(createResponseObject(foundGoal, message, null))    
@@ -66,10 +63,7 @@ router.put("/:id", (req, res) => {
             { foodgroup: foodgroupId, quantityGoal, quantityAccomplished, week: weekId }, 
             { new: true }
         )
-        .populate({
-            path: "foodgroup",
-            model: "Foodgroup"
-        })
+        .populate('foodgoup')
         .then((updatedGoal) => {
             let message = `Goal with id ${updatedGoal._id} has been updated.`
             res.status(200).json(createResponseObject(updatedGoal, message, null))    
