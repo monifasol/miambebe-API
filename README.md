@@ -1,12 +1,12 @@
 
 
-# Miam Bebe Server application
+# Miam Bebe Server (Back-end) application
 
 Server application (API) for Miam Bebe. 
 
-Access the API here: ...
+Access the API here: https://miambebe-server.herokuapp.com/
 
-Find the frontend app here: ...
+Find the frontend app here: https://miambebe.herokuapp.com/
 
 ## Description
 
@@ -180,17 +180,17 @@ Parents will receive tips of nutrition randomly.
 
 ### Git
 
-The url to repository and to deployed project
+URLs to repository and to deployed project
 
-[Repository Link](http://github.com)
+[Repository Link](https://github.com/monifasol/miambebe-server)
 
-[Deploy Link](http://heroku.com)
+[Deploy Link](https://miambebe-server.herokuapp.com/)
 
 ### Slides
 
-The url to your presentation slides
+URL to the presentation slides
 
-[Slides Link](http://slides.com)
+[Slides Link](https://docs.google.com/presentation/d/1xGhHNJUZrf0kUgqQx-IkHMziJCrfma6-KJy7SLHfJUs/edit#slide=id.p)
 
 
 ## Backlog
