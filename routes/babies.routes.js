@@ -3,19 +3,24 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const Baby = require("../models/Baby.model")
 const User = require("../models/User.model")
+const Goal = require("../models/Goal.model");
 
 const fileUploader = require("../config/cloudinary.config");
 
 const createResponseObject = require("../utils/createResponseObject")
 const createResponseErrorObject = require("../utils/createResponseErrorObject")
 
-//| HTTP verb | URL             | Request body  | Response           | Action                                      |
-//| --------- | --------------- | ------------- | ------------------ | ------------------------------------------- |
-//| GET       |`/babies`        | (empty)       | JSON               | Lists all babies                            |                   
-//| POST      |`/babies/:userId`| JSON          | JSON New Baby      | Adds a new baby for specified user          |                   
-//| GET       |`/babies/:id`    | (empty)       | JSON               | Returns the specified baby                  |               
-//| PUT       |`/babies/:id`    | JSON          | JSON Updated baby  | Updates info for the speficied baby         | 
-//| POST      |`/babies/:babyId/uploadPic`| JSON (file)    | pic_url  | Adds avatar picture to baby                |
+//| HTTP verb | URL                       | Request body  | Response           | Action                                 |
+//| --------- | ------------------------- | ------------- | ------------------ | -------------------------------------- |
+//| GET       |`/babies`                  | (empty)       | JSON               | Lists all babies                       |                   
+//| POST      |`/babies/:userId`          | JSON          | JSON New Baby      | Adds a new baby for specified user     |                   
+//| GET       |`/babies/:id`              | (empty)       | JSON               | Returns the specified baby             |               
+//| PUT       |`/babies/:id`              | JSON          | JSON Updated baby  | Updates info for the speficied baby    | 
+//| POST      |`/babies/:babyId/uploadPic`| JSON (file)   | pic_url            | Adds avatar picture to baby            |
+//| POST      |`/babies/goals`            | JSON          | JSON New Goal      | Adds a new goal to the baby            |                   
+//| PUT       |`/babies/goals/:goalId`    | JSON          | JSON Updated Goal  | Adds a new baby for specified user     |                   
+
+
 
 // PUT  /babies/:id  -  Updates the specified baby
 router.put("/:id", (req, res) => {
@@ -74,6 +79,16 @@ router.post("/:babyId/uploadPic", fileUploader.single("imageUrl"), (req, res, ne
 router.get("/", (req, res) => {
 
   Baby.find()
+    .populate({
+      path: "goals",
+      populate: [ 
+        {
+          path: "foodgroup",
+          model: "Foodgroup"
+        }
+      ]
+    })
+    .lean()
     .then((babies) => {
       let message = `${babies.length} baby(ies) found.`
       res.status(200).json(createResponseObject(users, message, null))    
@@ -85,15 +100,14 @@ router.get("/", (req, res) => {
 router.post("/:userId", (req, res) => {
   const { name, age, weight, pictureUrl } = req.body;
   const { userId } = req.params
-
-  console.log("IM GOING TO CREATE A BABY")
   
-  Baby.create({ name, age, weight, pictureUrl })
+  Baby.create({ name, age, weight, pictureUrl, goals: [] })
       .then((createdBaby) => {
+
+        // baby created
         let message = `Baby with id ${createdBaby.id} successfully created.`
 
-        console.log("BABY CREATED ==> ", createdBaby.id)
-
+        // add baby to user.babies
         User
         .findByIdAndUpdate(
             { _id : userId },
@@ -102,9 +116,7 @@ router.post("/:userId", (req, res) => {
           )
           .populate("babies")
           .then((updatedUser) => {
-
-            console.log("USER UPDATED WITH BABY ==> ", updatedUser.id)
-            let message = `Baby "${createdBaby.name}" created in profile of user with id ${updatedUser._id}.`
+            message = `${message} / Baby "${createdBaby.id}" added to user with id ${updatedUser._id}.`
             res.status(200).json(createResponseObject(updatedUser, message, null))    
           })
           .catch((error) => res.status(400).json(createResponseErrorObject(error)))
@@ -122,7 +134,18 @@ router.get("/:id", (req, res) => {
     return;
   }
 
-  Baby.findById(id)
+  Baby
+    .findById(id)
+    .populate({
+      path: "goals",
+      populate: [ 
+        {
+          path: "foodgroup",
+          model: "Foodgroup"
+        }
+      ]
+    })
+    .lean()
     .then((foundBaby) => {
       let message = `User with id ${foundBaby.id} found.`
       res.status(200).json(createResponseObject(foundBaby, message, null))    

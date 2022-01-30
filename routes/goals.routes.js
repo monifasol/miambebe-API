@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const Goal = require("../models/Goal.model");
-const Week = require("../models/Week.model");
+const Baby = require("../models/Baby.model");
 const Foodgroup = require("../models/Foodgroup.model")
 
 const createResponseObject = require("../utils/createResponseObject")
@@ -12,23 +12,21 @@ const createResponseErrorObject = require("../utils/createResponseErrorObject")
 
 // | HTTP verb | URL              | Request body  | Response          | Action                                        |
 // | --------- | ---------------- | ------------- | ----------------- | --------------------------------------------- |
-// | POST      |`/goals`          | JSON          | JSON              | Adds a new goal (and pushes a goal to Week)   |                
+// | POST      |`/goals/:babyId`  | JSON          | JSON              | Adds a new goal (and pushes a goal to Baby)   |                
 // | GET       |`/goals/:id`      | (empty)       | JSON              | Returns the specified goal                    |  
 // | PUT       |`/goals/:id`      | JSON          | JSON Updated goal | Updates the specified goal                    |  
 // | DELETE    |`/goals/:id`      | (empty)       | (empty)           | Deletes the specified goal                    |  
-// | GET       |`/goals/:weekId`  | (empty)       | JSON              | Lists goals for the specified week            |                
-
 
 
 //  POST /goals  -  Creates a new goal
 router.post("/", (req, res) => {
-    const { foodgroupId, quantityGoal, quantityAccomplished, weekId } = req.body;
+    const { foodgroupId, quantityGoal, quantityAccomplished, babyId } = req.body;
   
-    Goal.create({ foodgroup: foodgroupId, quantityGoal, quantityAccomplished, week: weekId })
+    Goal.create({ foodgroup: foodgroupId, quantityGoal, quantityAccomplished, baby: babyId })
         .then((newGoal) => {
 
             // when it works, then add the then and catch!
-            return Week.findByIdAndUpdate(weekId, {
+            return Baby.findByIdAndUpdate(babyId, {
                 $push: { goals: newGoal._id },
             });
         })
@@ -38,6 +36,15 @@ router.post("/", (req, res) => {
         })
         .catch((error) => res.status(400).json(createResponseErrorObject(error)))
   });
+
+
+// For DELETE Goal, we can do something similar to POST, but:
+            // when it works, then add the then and catch!
+            //return Baby.findByIdAndUpdate(babyId, {
+            //    $pull: { goals: goalToDelete._id },         // PULL! instead of push
+            //});
+
+
 
 //  GET /goals/:id  - Returns the speficied goal
 router.get("/:id", (req, res) => {
@@ -55,12 +62,12 @@ router.get("/:id", (req, res) => {
 //  PUT /goals  -  Updated the specified goal
 router.put("/:id", (req, res) => {
 
-    const { foodgroupId, quantityGoal, quantityAccomplished, weekId } = req.body
+    const { foodgroupId, quantityGoal, quantityAccomplished, babyId } = req.body
     const { id } = req.params
 
     Goal.findOneAndUpdate(
             { _id: id },
-            { foodgroup: foodgroupId, quantityGoal, quantityAccomplished, week: weekId }, 
+            { foodgroup: foodgroupId, quantityGoal, quantityAccomplished, baby: babyId }, 
             { new: true }
         )
         .populate('foodgoup')
@@ -70,5 +77,6 @@ router.put("/:id", (req, res) => {
         })
         .catch((error) => res.status(400).json(createResponseErrorObject(error)))
   });
+
 
 module.exports = router;

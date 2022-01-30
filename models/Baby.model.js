@@ -7,11 +7,11 @@ const babySchema = new Schema(
     weight: { type: Number, required: true},     // in Kg
     intolerances: [String],
     avoids: [String],
-    imageUrl: { type: String }
+    imageUrl: { type: String },
+    goals: [{ type: Schema.Types.ObjectId, ref: "Goal" }]
   },
   { timestamps: true }
 );
 
 const Baby = model("Baby", babySchema);
-
 module.exports = Baby;
