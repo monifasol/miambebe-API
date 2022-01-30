@@ -1,5 +1,4 @@
 
-const mongoose = require("mongoose");
 const Foodgroup = require("../../models/Foodgroup.model");
 
 const foodgroups = [
@@ -65,9 +64,6 @@ const foodgroups = [
   }
 ];
 
-// Connection BD
-require("../index");
-
 Foodgroup.deleteMany()
   .then((foodgroups) =>
     console.log(`Deleted ${foodgroups.deletedCount} foodgroups.`)
@@ -80,6 +76,3 @@ Foodgroup.deleteMany()
   .catch((err) =>
     console.log(`An error occurred seeding foodgroups to the DB: ${err}.` )
   )
-  .finally( ()=> {
-    mongoose.disconnect();
-  })

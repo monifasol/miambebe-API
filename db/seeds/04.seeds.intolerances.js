@@ -29,9 +29,6 @@ const intolerances = [
   }
 ];
 
-// Connection BD
-require("../index");
-
 Intolerance.deleteMany()
   .then((intolerances) =>
     console.log(`Deleted ${intolerances.deletedCount} intolerances.`)
@@ -43,6 +40,4 @@ Intolerance.deleteMany()
   .catch((err) =>
     console.log(`An error occurred seeding intolerances to the DB: ${err}.`)
   )
-  .finally( ()=> {
-    mongoose.disconnect();
-  })
+  
