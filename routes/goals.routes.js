@@ -47,17 +47,6 @@ router.post("/", (req, res) => {
         .catch((error) => res.status(400).json(createResponseErrorObject(error)))
   });
 
-
-
-router.delete("/:id", (req, res) => {
-// For DELETE Goal, we can do something similar to POST, but:
-            // when it works, then add the then and catch!
-            //return Baby.findByIdAndUpdate(babyId, {
-            //    $pull: { goals: goalToDelete._id },         // PULL! instead of push
-            //});
-});
-
-
 // GET /goals/:id  - Returns the speficied goal
 router.get("/:id", (req, res) => {
     const { id } = req.params;
@@ -90,6 +79,37 @@ router.put("/:id", (req, res) => {
         })
         .catch((error) => res.status(400).json(createResponseErrorObject(error)))
   });
+
+
+  // DELETE  /goals/:id/:babyId - Deletes the goal
+router.delete("/:id/:babyId", (req, res) => {
+
+    const { id, babyId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400).json({ message: "The specified goal id is not valid" });
+        return;
+    }
+
+    // first find Goal and Remove from the Baby's array of goals
+    Goal.findById({_id: id})
+        .then((foundGoal) => {
+
+            Baby.findByIdAndUpdate(babyId, {
+                $pull: { goals: foundGoal._id },
+            })
+            .then( () => {
+                Goal.deleteOne(foundGoal)
+                    .then(() => {
+                        let message = `Goal with id ${id} removed successfully.`
+                        res.status(200).json(createResponseObject(null, message, null))    
+                    })
+                    .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+              })
+            .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+        })
+        .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+});
 
 
 module.exports = router;

@@ -177,9 +177,6 @@ router.get("/:id", (req, res) => {
 //  GET /babies/:id/goals  - Returns the goals for the speficied baby
 router.get("/:id/goals", (req, res) => {
 
-  console.log("Im in backend, route GET/babies/:id/goals")
-  console.log("And babyId is: ", req.params.id)
-
   const { id } = req.params;
 
   Baby
