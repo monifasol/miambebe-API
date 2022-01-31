@@ -3,23 +3,23 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const Baby = require("../models/Baby.model")
 const User = require("../models/User.model")
-const Goal = require("../models/Goal.model");
+const Goal = require("../models/Goal.model");               // needed for the populate
+const Foodgroup = require("../models/Foodgroup.model");     // needed for the deep populate
 
 const fileUploader = require("../config/cloudinary.config");
 
 const createResponseObject = require("../utils/createResponseObject")
 const createResponseErrorObject = require("../utils/createResponseErrorObject")
 
-//| HTTP verb | URL                       | Request body  | Response           | Action                                 |
-//| --------- | ------------------------- | ------------- | ------------------ | -------------------------------------- |
-//| GET       |`/babies`                  | (empty)       | JSON               | Lists all babies                       |                   
-//| POST      |`/babies/:userId`          | JSON          | JSON New Baby      | Adds a new baby for specified user     |                   
-//| GET       |`/babies/:id`              | (empty)       | JSON               | Returns the specified baby             |               
-//| PUT       |`/babies/:id`              | JSON          | JSON Updated baby  | Updates info for the speficied baby    | 
-//| POST      |`/babies/:babyId/uploadPic`| JSON (file)   | pic_url            | Adds avatar picture to baby            |
-//| POST      |`/babies/goals`            | JSON          | JSON New Goal      | Adds a new goal to the baby            |                   
-//| PUT       |`/babies/goals/:goalId`    | JSON          | JSON Updated Goal  | Adds a new baby for specified user     |                   
-
+//| HTTP verb | URL                       | Request body  | Response           | Action                                   |
+//| --------- | ------------------------- | ------------- | ------------------ | ---------------------------------------- |
+//| GET       |`/babies`                  | (empty)       | JSON               | Lists all babies                         |                   
+//| POST      |`/babies/:userId`          | JSON          | JSON New Baby      | Adds a new baby for specified user       |                   
+//| GET       |`/babies/:id`              | (empty)       | JSON               | Returns the specified baby               |               
+//| GET       |`/babies/:id/goals`        | (empty)       | JSON               | Returns the goals for the specified baby |               
+//| PUT       |`/babies/:id`              | JSON          | JSON Updated baby  | Updates info for the speficied baby      | 
+//| POST      |`/babies/:babyId/uploadPic`| JSON (file)   | pic_url            | Adds avatar picture to baby              |
+//| PUT       |`/babies/goals/:goalId`    | JSON          | JSON Updated Goal  | Adds a new baby for specified user       |                   
 
 
 // PUT  /babies/:id  -  Updates the specified baby
@@ -38,7 +38,17 @@ router.put("/:id", (req, res) => {
           { _id : id },
           bodyRequest,
           { new: true }
-        )
+      )
+      .populate({
+        path: "goals",
+        populate: [ 
+          {
+            path: "foodgroup",
+            model: "Foodgroup"
+          }
+        ]
+      })
+      .lean()
       .then((updatedBaby) => {
         let message = `Baby with id ${updatedBaby._id} successfully updated.`
         res.status(200).json(createResponseObject(updatedBaby, message, null))    
@@ -65,7 +75,17 @@ router.post("/:babyId/uploadPic", fileUploader.single("imageUrl"), (req, res, ne
         { _id : babyId },
         { imageUrl: image_baby_url },
         { new: true }
-      )
+    )
+    .populate({
+      path: "goals",
+      populate: [ 
+        {
+          path: "foodgroup",
+          model: "Foodgroup"
+        }
+      ]
+    })
+    .lean()
     .then((updatedBaby) => {
       let message = `Picture uploaded for baby with id ${updatedBaby._id}.`
       res.status(200).json(createResponseObject(updatedBaby, message, null))    
@@ -149,6 +169,35 @@ router.get("/:id", (req, res) => {
     .then((foundBaby) => {
       let message = `User with id ${foundBaby.id} found.`
       res.status(200).json(createResponseObject(foundBaby, message, null))    
+    })
+    .catch((error) => res.status(400).json(createResponseErrorObject(error)))
+});
+
+
+//  GET /babies/:id/goals  - Returns the goals for the speficied baby
+router.get("/:id/goals", (req, res) => {
+
+  console.log("Im in backend, route GET/babies/:id/goals")
+  console.log("And babyId is: ", req.params.id)
+
+  const { id } = req.params;
+
+  Baby
+    .findById(id)
+    .populate({
+      path: "goals",
+      populate: [ 
+        {
+          path: "foodgroup",
+          model: "Foodgroup"
+        }
+      ]
+    })
+    .lean()
+    .then((baby) => {
+        let goalsBaby = baby.goals 
+        let message = `${goalsBaby.length} goal(s) found for baby ${baby._id}.`
+        res.status(200).json(createResponseObject(goalsBaby, message, null))    
     })
     .catch((error) => res.status(400).json(createResponseErrorObject(error)))
 });

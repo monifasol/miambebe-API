@@ -62,13 +62,15 @@ generate a JWT token. Otherwise, the API will not work for you since the request
 
 ##### Babies routes
 
-| HTTP verb | URL                       | Request body  | Response           | Action                                 |
-| --------- | ------------------------- | ------------- | ------------------ | -------------------------------------- |
-| GET       |`/babies`                  | (empty)       | JSON               | Lists all babies                       |                   
-| POST      |`/babies/:userId`          | JSON          | JSON New Baby      | Adds a new baby for specified user     |                   
-| GET       |`/babies/:id`              | (empty)       | JSON               | Returns the specified baby             |               
-| PUT       |`/babies/:id`              | JSON          | JSON Updated baby  | Updates info for the speficied baby    | 
-| POST      |`/babies/:babyId/uploadPic`| JSON (file)   | pic_url            | Adds avatar picture to baby            |
+| HTTP verb | URL                       | Request body  | Response           | Action                                   |
+| --------- | ------------------------- | ------------- | ------------------ | ---------------------------------------- |
+| GET       |`/babies`                  | (empty)       | JSON               | Lists all babies                         |                   
+| POST      |`/babies/:userId`          | JSON          | JSON New Baby      | Adds a new baby for specified user       |                   
+| GET       |`/babies/:id`              | (empty)       | JSON               | Returns the specified baby               |               
+| GET       |`/babies/:id/goals`        | (empty)       | JSON               | Returns the goals for the specified baby |               
+| PUT       |`/babies/:id`              | JSON          | JSON Updated baby  | Updates info for the speficied baby      | 
+| POST      |`/babies/:babyId/uploadPic`| JSON (file)   | pic_url            | Adds avatar picture to baby              |
+| PUT       |`/babies/goals/:goalId`    | JSON          | JSON Updated Goal  | Adds a new baby for specified user       |                   
 
 ##### Goals routes
 
