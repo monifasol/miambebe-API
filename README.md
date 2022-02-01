@@ -2,9 +2,9 @@
 
 Server application (API) for Miam Bebe. 
 
-Access the API here: https://miambebe-server.herokuapp.com/
+Access the [API](https://miambebe-server.herokuapp.com/) here. 
 
-Find the frontend app here: https://miambebe.herokuapp.com/
+Find the [website](https://miambebe.herokuapp.com/) (client side, frontend app) here.
 
 ## Description
 
