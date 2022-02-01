@@ -1,5 +1,4 @@
 
-const mongoose = require("mongoose");
 const Tip = require("../../models/Tip.model");
 
 const tips = [
@@ -21,9 +20,6 @@ const tips = [
   { content: "There are so many tasty spices for spicing up a dish like cumin, curcuma, curry, nutmeg, oregan, pepper... to avoid the salt!"},
 ];
 
-// Connection BD
-require("../index");
-
 Tip.deleteMany()
   .then((tips) =>
     console.log(`Deleted ${tips.deletedCount} tips.`)
@@ -35,6 +31,3 @@ Tip.deleteMany()
   .catch((err) =>
     console.log(`An error occurred seeding tips to the DB: ${err}.`)
   )
-  .finally( ()=> {
-    mongoose.disconnect();
-  })

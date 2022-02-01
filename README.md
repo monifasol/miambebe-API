@@ -1,5 +1,3 @@
-
-
 # Miam Bebe Server (Back-end) application
 
 Server application (API) for Miam Bebe. 
@@ -10,17 +8,32 @@ Find the frontend app here: https://miambebe.herokuapp.com/
 
 ## Description
 
-Miam bebe is a Baby's nutrition tracker. It allows parents to keep track of what they give to their babies on a weekly basis, keeping track of their intolerances, introduction of foods, reaction to them, dates,...
+Miam bebe is a Baby's nutrition goals tracker. It allows parents to set some nutrition goals based on the main foodgroups, 
+and keep track of their progress. Parents introduce some initial food goals for their babies. As they update the progress of their goals, they'll see a visual representation of what they have accomplished so far. 
 
-Parents introduced the initial food goals for the following week, and during the week they'll submit the foods they are giving to their babies. They'll see the progress of their babies nutrition for that week, and plan accordingly the remaining meals. 
+Parents will receive a notification at the middle of the month, with the current status of their goals, the nutrition progress, and some recipes ideas for the remaining meals. They will also receive random nutrition tips.
 
-Parents will receive a notification at the middle of the week, with the current status of the week, the nutrition progress, and some recip ideas for the remaining meals.
+On the other side, parents can store receipts for future insipiration and share those with other parents. 
 
-They can access the full agenda where all the weeks and their information are stored. 
+In the futue, Miam Bebé will also offer a tracking system of their babies nutrition on a weekly basis, keep track of their intolerances, introduction of foods, reaction to them, dates,...
 
-They can also store receipts for future insipiration and share those with other parents. 
 
-Parents will receive tips of nutrition randomly.
+# Run locally
+
+## Download, and install
+
+Go to project directory `/miam-bebe-server` and run `npm install` to install all node packages and dependencies.   
+
+In order to populate the database with mock data, there are some seeds prepare under `/db`. Go to that directory and run 
+`node db/seeds.js`   
+
+Come back to root directory `/miam-bebe-server` and run `npm start`.  
+
+In the browser, API is running under `localhost:5000`  
+You should get the message "All good in here".  
+
+In order to start using, you need to download also the client side, and LOG IN on the website (admin@miambebe.com - 1234) in order to
+generate a JWT token. Otherwise, the API will not work for you since the requests need to be authenticated and authorized.   
 
 
 # API Documentation
@@ -29,12 +42,12 @@ Parents will receive tips of nutrition randomly.
 
 ##### Auth routes
 
-| HTTP verb | URL          | Request Headers                 | Request Body              | Action               |
-| --------- | ------------ | ------------------------------- | ------------------------- | -------------------- |
+| HTTP verb | URL               | Request Headers                 | Request Body              | Action               |
+| --------- | ----------------- | ------------------------------- | ------------------------- | -------------------- |
 | POST      | `/auth/signup`    | --                              | { email, password, name } | Signs user up        |
 | POST      | `/auth/login`     | --                              | { email, password }       | Logs user in         |
 | GET       | `/auth/verify`    | Authorization: Bearer \< JWT \> | --                        | Verifies user token  |
-| GET       | `/logout`    |                                 | --                        | Logs user out        |
+| GET       | `/logout`         |                                 | --                        | Logs user out        |
 
 ##### Users routes
                                    
@@ -49,34 +62,24 @@ Parents will receive tips of nutrition randomly.
 
 ##### Babies routes
 
-| HTTP verb | URL             | Request body  | Response           | Action                                      |
-| --------- | --------------- | ------------- | ------------------ | ------------------------------------------- |
-| GET       |`/babies`        | (empty)       | JSON               | Lists all babies                            |                   
-| POST      |`/babies/:userId`| JSON          | JSON New Baby      | Adds a new baby for specified user          |                   
-| GET       |`/babies/:id`    | (empty)       | JSON               | Returns the specified baby                  |               
-| PUT       |`/babies/:id`    | JSON          | JSON Updated baby  | Updates info for the speficied baby         | 
-| POST      |`/babies/:babyId/uploadPic`| JSON (file)    | pic_url  | Adds avatar picture to baby                |
-
-##### Weeks routes
-
-| HTTP verb | URL                       | Request body  | Response          | Action                                   |
-| --------- | ------------------------- | ------------- | ----------------- | ---------------------------------------- |
-| GET       |`/weeks/:babyId`           | (empty)       | JSON              | Lists all weeks for the specified baby   |   
-| POST      |`/weeks`                   | JSON          | JSON New week     | Adds a new week for the specified baby   |   
-| GET       |`/weeks/:babyId/:firstday` | (empty)       | JSON              | Returns week with the specified firstday |   
-| GET       |`/weeks/:id`               | (empty)       | JSON              | Returns the specified week               |                
-| PUT       |`/weeks/:id`               | JSON          | JSON Updated week | Updates Week (add GOALS to the week)     |                
-| DELETE    |`/weeks/:id`               | (empty)       | JSON              | Deletes goals from specified week        | 
+| HTTP verb | URL                       | Request body  | Response           | Action                                   |
+| --------- | ------------------------- | ------------- | ------------------ | ---------------------------------------- |
+| GET       |`/babies`                  | (empty)       | JSON               | Lists all babies                         |                   
+| POST      |`/babies/:userId`          | JSON          | JSON New Baby      | Adds a new baby for specified user       |                   
+| GET       |`/babies/:id`              | (empty)       | JSON               | Returns the specified baby               |               
+| GET       |`/babies/:id/goals`        | (empty)       | JSON               | Returns the goals for the specified baby |               
+| PUT       |`/babies/:id`              | JSON          | JSON Updated baby  | Updates info for the speficied baby      | 
+| POST      |`/babies/:babyId/uploadPic`| JSON (file)   | pic_url            | Adds avatar picture to baby              |
+| PUT       |`/babies/goals/:goalId`    | JSON          | JSON Updated Goal  | Adds a new baby for specified user       |                   
 
 ##### Goals routes
 
 | HTTP verb | URL              | Request body  | Response          | Action                                        |
 | --------- | ---------------- | ------------- | ----------------- | --------------------------------------------- |
-| POST      |`/goals`          | JSON          | JSON              | Adds a new goal (and pushes a goal to Week)   |                
+| POST      |`/goals`          | JSON          | JSON              | Adds a new goal (and pushes a goal to Baby)   |                
 | GET       |`/goals/:id`      | (empty)       | JSON              | Returns the specified goal                    |  
 | PUT       |`/goals/:id`      | JSON          | JSON Updated goal | Updates the specified goal                    |  
 | DELETE    |`/goals/:id`      | (empty)       | (empty)           | Deletes the specified goal                    |  
-| GET       |`/goals/:weekId`  | (empty)       | JSON              | Lists goals for the specified week            |                
 
 ##### Recipes routes
 
@@ -97,7 +100,7 @@ Parents will receive tips of nutrition randomly.
 | GET       |`/foodgroups`           | (empty)       | JSON      | Lists all foodgroups                         |                
 | GET       |`/intolerances`         | (empty)       | JSON      | Lists all intolerances                       | 
 | GET       |`/tips/random`          | (empty)       | JSON      | Gets a random tip                            |                
-| GET       |`/notifications/:weekId`| (empty)       | JSON      | Returns notifications for the specified week |             
+| GET       |`/notifications/:babyId`| (empty)       | JSON      | Returns notifications for the specified baby |             
 
 
 ## Models
@@ -119,14 +122,7 @@ Parents will receive tips of nutrition randomly.
     weight: { type: Number, required: true},     // in Kg
     intolerances: [String],
     avoids: [String],
-    name: { type: String}
-```
-
-##### Week model
-```js
-    firstday: { type: String, required: true},
-    lastday: { type: String, required: true},
-    baby: { type: Schema.Types.ObjectId, ref: "Baby" },
+    name: { type: String},
     goals: [{ type: Schema.Types.ObjectId, ref: "Goal" }]
 ```
 
@@ -135,7 +131,7 @@ Parents will receive tips of nutrition randomly.
     foodgroup: { type: String, required: true},
     quantity: { type: Number, required: true},    // in portions
     given: { type: Number},
-    week: { type: Schema.Types.ObjectId, ref: "Week" }
+    baby: { type: Schema.Types.ObjectId, ref: "Baby" }
 ```
 
 ##### Recipe model
@@ -167,7 +163,7 @@ Parents will receive tips of nutrition randomly.
 ##### Notification model
 ```js
     content: { type: String, required: true},
-    week: { type: Schema.Types.ObjectId, ref: "Week" }
+    baby: { type: Schema.Types.ObjectId, ref: "Baby" }
 ```
 
 ##### Tip model
@@ -195,9 +191,9 @@ URL to the presentation slides
 
 ## Backlog
 
-Internalization    
-Share recipes to facebook   
-Add more graphics (food intolerances)   
-Manage introduction of foods   
-School connecting to app   
-Doctor connecting to app    
+Internalization  
+Share recipes to facebook  
+Add more graphics (food intolerances)  
+Manage introduction of foods  
+School connecting to app  
+Doctor connecting to app   

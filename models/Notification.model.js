@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose");
 const notificationSchema = new Schema(
   {
     content: { type: String, required: true},
-    week: { type: Schema.Types.ObjectId, ref: "Week" }
+    baby: { type: Schema.Types.ObjectId, ref: "Baby" }
   },
   { timestamps: true }
 );

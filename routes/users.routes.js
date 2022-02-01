@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const User = require("../models/User.model");
-const Baby = require("../models/Baby.model")
 
 const createResponseObject = require("../utils/createResponseObject")
 const createResponseErrorObject = require("../utils/createResponseErrorObject")
@@ -20,7 +19,22 @@ const createResponseErrorObject = require("../utils/createResponseErrorObject")
 router.get("/", (req, res, next) => {
 
   User.find()
-    .populate('babies')
+    .populate({
+      path: "babies",
+      populate: [ 
+        {
+          path: "goals",
+          model: "Goal",
+          populate: [ 
+            {
+              path: "foodgroup",
+              model: "Foodgroup"
+            }
+          ]
+        }
+      ]
+    })
+    .lean()
     .then((users) => {
       let message = `${users.length} user(s) found.`
       res.status(200).json(createResponseObject(users, message, null))    
@@ -51,14 +65,28 @@ router.get("/:id", (req, res, next) => {
   }
 
   User.findById(id)
-    .populate('babies')
+    .populate({
+      path: "babies",
+      populate: [ 
+        {
+          path: "goals",
+          model: "Goal",
+          populate: [ 
+            {
+              path: "foodgroup",
+              model: "Foodgroup"
+            }
+          ]
+        }
+      ]
+    })
+    .lean()
     .then((foundUser) => {
       let message = `User with id ${foundUser.id} found.`
       res.status(200).json(createResponseObject(foundUser, message, null))    
     })
     .catch((error) => res.status(400).json(createResponseErrorObject(error)))
 });
-
 
 
 // PUT  /users/:id  -  Updates the specified user
@@ -77,15 +105,29 @@ router.put("/:id", (req, res) => {
         { _id : id },
         { name: name },
         { new: true }
-      )
-    .populate("babies")
+    )
+    .populate({
+      path: "babies",
+      populate: [ 
+        {
+          path: "goals",
+          model: "Goal",
+          populate: [ 
+            {
+              path: "foodgroup",
+              model: "Foodgroup"
+            }
+          ]
+        }
+      ]
+    })
+    .lean()
     .then((updatedUser) => {
       let message = `User with id ${updatedUser._id} successfully updated.`
       res.status(200).json(createResponseObject(updatedUser, message, null))    
     })
     .catch((error) => res.status(400).json(createResponseErrorObject(error)))
 });
-
 
 
 // PUT  /users/:id/baby  -  Updates the specified user adding a baby
@@ -105,7 +147,22 @@ router.put("/:id/baby", (req, res) => {
         { $addToSet: { babies: babyId } },  
         { new: true }
       )
-      .populate("babies")
+      .populate({
+        path: "babies",
+        populate: [ 
+          {
+            path: "goals",
+            model: "Goal",
+            populate: [ 
+              {
+                path: "foodgroup",
+                model: "Foodgroup"
+              }
+            ]
+          }
+        ]
+      })
+      .lean()
       .then((updatedUser) => {
         let message = `Baby added! User with id ${updatedUser._id} successfully updated.`
         res.status(200).json(createResponseObject(updatedUser, message, null))    
